@@ -3,7 +3,7 @@
 """
 @author: Ignacio García Fernández
 
-Load relief database 
+Load relief database
 """
 
 import numpy as np
@@ -12,27 +12,27 @@ from mpl_toolkits.mplot3d import Axes3D
 
 from scipy.io import loadmat
 
-def draw_terrain(Z,N=None,label="No label",d=1.7):    
+def draw_terrain(Z,N=None,label="No label",d=1.7):
 
     if N is None:
         tam = len(Z)
     else:
         tam = 2**N+1
-    
+
     A = np.max(abs(Z))
-    
+
     fig = plt.figure()
     ax = fig.gca(projection='3d')
     ax.set_zlim(-d*A,d*A)
 
-    
+
     X,Y = np.meshgrid( range(tam),range(tam) )
 
     #ax.plot_wireframe(X, Y, Z)
     ax.plot_surface(X, Y, Z)
     if np.max(np.abs(Z)) > 1e-5:
         ax.contour(X,Y,Z,dir='z',offset=-d*A)
-    
+
     plt.title(label)
     plt.show()
 
@@ -70,7 +70,7 @@ for ex in examp:
 # Plot images of the height fields
 n_img_per_row = 10
 n_rows = 10
-h = d+2 # height/width of each digit 
+h = d+2 # height/width of each digit
 img = np.zeros(( h * n_rows , h * n_img_per_row ))
 for i in range(n_rows):
     ix = h * i + 1
@@ -84,4 +84,3 @@ plt.xticks([])
 plt.yticks([])
 plt.title('A selection from the mountains relief dataset')
 plt.show()
-
