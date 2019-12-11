@@ -9,6 +9,9 @@ from sklearn.model_selection import train_test_split
 
 # FUNCTIONS
 #################################################################
+
+# Provided functions
+#################################################################
 def draw_terrain(Z,N=None,label="No label",d=1.7):
 
     if N is None:
@@ -37,37 +40,68 @@ def get_patch(X,i,dim=8):
     ptch = X[i].reshape(dim,dim)
     return ptch
 
-def show_patch(X,i,labels,dim=8):
+def show_patch(X,i,y,dim=8):
     plt.gray()
     plt.matshow(get_patch(X,i,dim))
-    plt.title("A sample digit: "+str(labels[i]))
+    plt.title("A sample digit: "+str(y[i]))
     plt.show()
 
+# Custom functions
+#################################################################
+def load_data(file_name):
+    """
+    It loads set data from .mat file.
+
+    file_name: path to the file
+    return: set of data and labels
+    """
+    mat = loadmat(file_name, squeeze_me=True, struct_as_record=False)
+    X = np.array(mat['A'])/4.0 + 0.5
+    y = mat['y']
+    return X, y
+
 def separate_label(X,y,label):
-    X_sep = []
+    """
+    It returns subset of data and labels with given label.
+
+    X: array of data
+    y: array of labels of the data
+    return: array of data with array of labels
+    """
+    X_sep = np.array(np.zeros(len(X[0]))) #set width of row so vstack works
+    y_sep = np.array([])
     for i in range(len(X)):
         if y[i] == label:
-            X_sep.append(X[i])
-    return X_sep
+            X_sep = np.vstack((X_sep,X[i]))
+            y_sep = np.append(y_sep,y[i])
+    X_sep = np.delete(X_sep,0,axis=0) #delete first row
+    return X_sep, y_sep
+
+def separate_labels(X,y,labels):
+    """
+    RIt returns subset of data and labels with given labels.
+
+    X: array of data
+    y: array of labels of the data
+    l: array of selected lables
+    return: array of data and array of labels
+    """
+    X_sep = np.array(np.zeros(len(X[0]))) #set width of row so vstack works
+    y_sep = np.array([])
+    for i in range(len(X)):
+        if np.isin(y[i],labels):
+            X_sep = np.vstack((X_sep,X[i]))
+            y_sep = np.append(y_sep,y[i])
+    X_sep = np.delete(X_sep,0,axis=0) #delete first row
+    return X_sep, y_sep
 
 # MAIN
 #################################################################
-mat = loadmat("terrain.mat", squeeze_me=True, struct_as_record=False)
-X = np.array(mat['A'])/4.0 + 0.5
-y = mat['y']
 
-rng = np.random.randint(100)
+#loading data
+X, y = load_data("terrain.mat")
 
-X1 = separate_label(X,y,1)
-X0 = separate_label(X,y,0)
-X = np.concatenate((X1,X0))
-y = np.concatenate((np.full(len(X1),1),np.full(len(X0),0)),axis=None)
-
-
-clf = MLPClassifier(hidden_layer_sizes=(5,100), max_iter=1000, alpha=1e-4, solver='sgd', tol=1e-4, verbose=10, random_state=1, learning_rate_init=.005)
-
-X_train, X_test, y_train, y_test = \
-    train_test_split(X, y, test_size=0.25, random_state=rng)
-
-clf.fit(X_train, y_train)
-print clf.score(X_test,y_test)
+# sepating the cleses 0 and 1 from data set
+X01, y01 = separate_labels(X,y,(0,1))
+print X01
+print y01
