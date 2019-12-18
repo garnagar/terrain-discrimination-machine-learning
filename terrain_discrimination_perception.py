@@ -95,7 +95,6 @@ def separate_labels(X,y,labels):
     X_sep = np.delete(X_sep,0,axis=0) #delete first row
     return X_sep, y_sep
 
-# Perception classifier
 def classifier_test(X,y,clf,iter):
     avg_score = 0
     avg_time = 0

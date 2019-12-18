@@ -12,3 +12,8 @@
 
 # Dimensionality reduction
 - linear transformation
+
+# Resuts
+(15,)
+Average training time: 2.08087857008
+Average score: 0.6404
