@@ -159,46 +159,46 @@ print "----lbfgs solver"
 # plt.show()
 
 # neuron number test
-# neurons = [5,10,15,20,25]
-# yTime = []
-# yScore = []
-# for n in neurons:
-#     print "--Number of neurons: {}".format(n)
-#     mlp.set_params(hidden_layer_sizes=(n,))
-#     s, t = classifier_test(X01,y01,mlp,50)
-#     yTime.append(t)
-#     yScore.append(s)
-#
-# plot_score_time(neurons,"Number of neurons",yScore,yTime)
-#
-# mlp.set_params(hidden_layer_sizes=(15,)) # reset to default
+neurons = [2000,3000,4000]
+yTime = []
+yScore = []
+for n in neurons:
+    print "--Number of neurons: {}".format(n)
+    mlp.set_params(hidden_layer_sizes=(n,))
+    s, t = classifier_test(X01,y01,mlp,1)
+    yTime.append(t)
+    yScore.append(s)
 
-# 2 layer neuron number test
-neurons = [5,10,15,20,25]
-for n1 in neurons:
-    yTime = []
-    yScore = []
-    for n2 in neurons:
-        print "--Number of neurons: ({},{})".format(n1,n2)
-        mlp.set_params(hidden_layer_sizes=(n1,n2,))
-        s, t = classifier_test(X01,y01,mlp,50)
-        yTime.append(t)
-        yScore.append(s)
-    plt.subplot(1,2,1)
-    plt.plot(neurons,yScore,'--x',label="{} N in layer 1".format(n1))
-    plt.subplot(1,2,2)
-    plt.plot(neurons,yTime,'--x',label="{} N in layer 1".format(n1))
-plt.subplot(1,2,1)
-plt.legend(loc="lower left")
-plt.xlabel("Neurons in layer 2")
-plt.ylabel("Average score")
-plt.subplot(1,2,2)
-plt.legend(loc="lower left")
-plt.xlabel("Neurons in 2nd layer")
-plt.ylabel("Average training time [s]")
-plt.show()
+plot_score_time(neurons,"Number of neurons",yScore,yTime)
 
 mlp.set_params(hidden_layer_sizes=(15,)) # reset to default
+
+# 2 layer neuron number test
+# neurons = [5,10,15,20,25]
+# for n1 in neurons:
+#     yTime = []
+#     yScore = []
+#     for n2 in neurons:
+#         print "--Number of neurons: ({},{})".format(n1,n2)
+#         mlp.set_params(hidden_layer_sizes=(n1,n2,))
+#         s, t = classifier_test(X01,y01,mlp,50)
+#         yTime.append(t)
+#         yScore.append(s)
+#     plt.subplot(1,2,1)
+#     plt.plot(neurons,yScore,'--x',label="{} N in layer 1".format(n1))
+#     plt.subplot(1,2,2)
+#     plt.plot(neurons,yTime,'--x',label="{} N in layer 1".format(n1))
+# plt.subplot(1,2,1)
+# plt.legend(loc="lower left")
+# plt.xlabel("Neurons in layer 2")
+# plt.ylabel("Average score")
+# plt.subplot(1,2,2)
+# plt.legend(loc="lower left")
+# plt.xlabel("Neurons in 2nd layer")
+# plt.ylabel("Average training time [s]")
+# plt.show()
+#
+# mlp.set_params(hidden_layer_sizes=(15,)) # reset to default
 
 # sgd solver
 mlp.set_params(solver='sgd')
@@ -220,7 +220,7 @@ print "----sgd solver"
 # mlp.set_params(learning_rate_init=0.001) # reset to default
 
 # batch size test
-# batch_size = [25,50,75,100,125,150,175,200,225,250,275,300,325,350,375,400]
+# batch_size = [5,10,20,40,50,100,200]
 # yTime = []
 # yScore = []
 # for b in batch_size:
