@@ -110,9 +110,9 @@ def classifier_test(X,y,clf,iter):
         avg_score += clf.score(X_test,y_test)
     avg_time /= iter
     avg_score /= iter
-    print "Number of iterations: {}".format(iter)
-    print "Average score: {}".format(avg_score)
-    print "Average training time [s]: {}".format(avg_time)
+    print ("Number of iterations: {}".format(iter))
+    print ("Average score: {}".format(avg_score))
+    print ("Average training time [s]: {}".format(avg_time))
     return avg_score, avg_time
 
 def plot_score_time(x,x_label,yScore,yTime):
@@ -135,16 +135,23 @@ def plot_score_time(x,x_label,yScore,yTime):
 # loading data
 X, y = load_data("terrain.mat")
 
+X0, y0 =separate_label(X,y,0)
+X1, y1 =separate_label(X,y,1)
+X2, y2 =separate_label(X,y,2)
+X3, y3 =separate_label(X,y,3)
+ex =[y0[0],y1[0], y2[0], y3[0]]
+draw_terrain(get_patch(X,ex,dim=64),d=1)
+
 # sepating the cleses 0 and 1 from data set
 X01, y01 = separate_labels(X,y,(0,1))
 
 # Multy layer perceptron classifier
 #################################################################
-print "------MLP classifier"
+print ("------MLP classifier")
 mlp = MLPClassifier(solver='lbfgs', alpha=1e-5, hidden_layer_sizes=(15,), random_state=1)
 
 # lbfgs solver
-print "----lbfgs solver"
+print ("----lbfgs solver")
 
 # activation func test
 # activation_func = ['identity', 'logistic', 'tanh', 'relu']
@@ -200,9 +207,10 @@ mlp.set_params(hidden_layer_sizes=(15,)) # reset to default
 #
 # mlp.set_params(hidden_layer_sizes=(15,)) # reset to default
 
+
 # sgd solver
 mlp.set_params(solver='sgd')
-print "----sgd solver"
+print ("----sgd solver")
 
 # learning rate test
 # rate = [0.0025,0.005,0.0075,0.01,0.0125,0.015,0.0175,0.02,0.03,0.04,0.05]
