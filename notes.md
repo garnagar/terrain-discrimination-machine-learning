@@ -18,6 +18,10 @@
 Average training time: 2.08087857008
 Average score: 0.6404
 
+<<<<<<< HEAD
+3-5 NN
+dimentinality reduction
+=======
 
 
 
@@ -88,3 +92,4 @@ X2, y2 =separate_label(X,y,2)
 X3, y3 =separate_label(X,y,3)
 ex =[y0[0],y1[0], y2[0], y3[0]]
 draw_terrain(get_patch(X,ex,dim=64),d=1)
+>>>>>>> 8e846591c1d73015e177a7643df0eeef7a7b3d43
