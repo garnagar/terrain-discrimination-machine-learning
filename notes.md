@@ -17,3 +17,6 @@
 (15,)
 Average training time: 2.08087857008
 Average score: 0.6404
+
+3-5 NN
+dimentinality reduction

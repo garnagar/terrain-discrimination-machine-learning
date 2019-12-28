@@ -1,11 +1,11 @@
 import numpy as np
 import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
-
+from time import time
 from scipy.io import loadmat
-
 from sklearn.neural_network import MLPClassifier
 from sklearn.model_selection import train_test_split
+from sklearn.linear_model import Perceptron
 
 # FUNCTIONS
 #################################################################
@@ -79,7 +79,7 @@ def separate_label(X,y,label):
 
 def separate_labels(X,y,labels):
     """
-    RIt returns subset of data and labels with given labels.
+    It returns subset of data and labels with given labels.
 
     X: array of data
     y: array of labels of the data
@@ -95,13 +95,146 @@ def separate_labels(X,y,labels):
     X_sep = np.delete(X_sep,0,axis=0) #delete first row
     return X_sep, y_sep
 
+def classifier_test(X,y,clf,iter):
+    avg_score = 0
+    avg_time = 0
+    for i in range(iter):
+        # cross validation sets
+        rng = np.random.RandomState(np.random.randint(100))
+        X_train, X_test, y_train, y_test = train_test_split(X01, y01, test_size=.25, random_state=rng)
+        # training
+        t_ini = time()
+        clf.fit(X_train, y_train)
+        avg_time += time() - t_ini
+        # scores
+        avg_score += clf.score(X_test,y_test)
+    avg_time /= iter
+    avg_score /= iter
+    print "Number of iterations: {}".format(iter)
+    print "Average score: {}".format(avg_score)
+    print "Average training time [s]: {}".format(avg_time)
+    return avg_score, avg_time
+
+def plot_score_time(x,x_label,yScore,yTime):
+    plt.subplot(1,2,1)
+    plt.plot(x,yScore,'--x')
+    plt.xlabel(x_label)
+    plt.ylabel("Average score")
+    plt.subplot(1,2,2)
+    plt.plot(x,yTime,'--x')
+    plt.xlabel(x_label)
+    plt.ylabel("Average training time [s]")
+    plt.show()
+
 # MAIN
 #################################################################
 
-#loading data
+# Init
+#################################################################
+# loading data
 X, y = load_data("terrain.mat")
 
 # sepating the cleses 0 and 1 from data set
 X01, y01 = separate_labels(X,y,(0,1))
-print X01
-print y01
+
+# Perceptron classifier
+#################################################################
+print "------Perceptron classifier"
+per = Perceptron(verbose=0,max_iter=100000)
+# classifier_test(X01,y01,per,10)
+
+# Multy layer perceptron classifier
+#################################################################
+print "------MLP classifier"
+mlp = MLPClassifier(solver='lbfgs', alpha=1e-5, hidden_layer_sizes=(15,), random_state=1)
+
+# lbfgs solver
+print "----lbfgs solver"
+
+# activation func test
+# activation_func = ['identity', 'logistic', 'tanh', 'relu']
+# for a in activation_func:
+#     print "--Activation function: {}".format(a)
+#     mlp.set_params(activation=a)
+#     s, t = classifier_test(X01,y01,mlp,20)
+#     plt.plot(s, t, 'x',label=a)
+# plt.legend(loc="lower right")
+# plt.xlabel("Average score")
+# plt.ylabel("Average training time [s]")
+# plt.show()
+
+# neuron number test
+# neurons = [2000,3000,4000]
+# yTime = []
+# yScore = []
+# for n in neurons:
+#     print "--Number of neurons: {}".format(n)
+#     mlp.set_params(hidden_layer_sizes=(n,))
+#     s, t = classifier_test(X01,y01,mlp,1)
+#     yTime.append(t)
+#     yScore.append(s)
+#
+# plot_score_time(neurons,"Number of neurons",yScore,yTime)
+#
+# mlp.set_params(hidden_layer_sizes=(15,)) # reset to default
+
+# 2 layer neuron number test
+# neurons = [5,10,15,20,25]
+# for n1 in neurons:
+#     yTime = []
+#     yScore = []
+#     for n2 in neurons:
+#         print "--Number of neurons: ({},{})".format(n1,n2)
+#         mlp.set_params(hidden_layer_sizes=(n1,n2,))
+#         s, t = classifier_test(X01,y01,mlp,50)
+#         yTime.append(t)
+#         yScore.append(s)
+#     plt.subplot(1,2,1)
+#     plt.plot(neurons,yScore,'--x',label="{} N in layer 1".format(n1))
+#     plt.subplot(1,2,2)
+#     plt.plot(neurons,yTime,'--x',label="{} N in layer 1".format(n1))
+# plt.subplot(1,2,1)
+# plt.legend(loc="lower left")
+# plt.xlabel("Neurons in layer 2")
+# plt.ylabel("Average score")
+# plt.subplot(1,2,2)
+# plt.legend(loc="lower left")
+# plt.xlabel("Neurons in 2nd layer")
+# plt.ylabel("Average training time [s]")
+# plt.show()
+#
+# mlp.set_params(hidden_layer_sizes=(15,)) # reset to default
+
+# sgd solver
+mlp.set_params(solver='sgd')
+print "----sgd solver"
+
+# learning rate test
+# rate = [0.0025,0.005,0.0075,0.01,0.0125,0.015,0.0175,0.02,0.03,0.04,0.05]
+# yTime = []
+# yScore = []
+# for r in rate:
+#     print "--Initial learning rate: {}".format(r)
+#     mlp.set_params(learning_rate_init=r)
+#     s, t = classifier_test(X01,y01,mlp,50)
+#     yTime.append(t)
+#     yScore.append(s)
+#
+# plot_score_time(rate,"Initial learning rate",yScore,yTime)
+#
+# mlp.set_params(learning_rate_init=0.001) # reset to default
+
+# batch size test
+# batch_size = [5,10,20,40,50,100,200]
+# yTime = []
+# yScore = []
+# for b in batch_size:
+#     print "--Batch size: {}".format(b)
+#     mlp.set_params(batch_size=b)
+#     s, t = classifier_test(X01,y01,mlp,20)
+#     yTime.append(t)
+#     yScore.append(s)
+#
+# plot_score_time(batch_size,"Batch size",yScore,yTime)
+#
+# mlp.set_params(batch_size='auto') # reset to default
