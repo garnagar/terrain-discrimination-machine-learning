@@ -24,11 +24,16 @@ Average score: 0.6404
 
 
 introduction
-input data range presentation
-0-1?
+Given Data set contains: 
+400 samples
+with 41125 data points each
+
+0.36322569 0.36468692 0.36659293 ... 0.09645185 0.09093432 0.08933465
+data point range between 0 and 1
+
 number of samples for each class 100
 4 classes
-41125 data points
+
 -> hidden layers in that range?
 all classes
 a) test 1 against 0
@@ -52,6 +57,25 @@ future:
 dropout?
 b) test against all classes
 clustering
+
+
+
+
+
+
+
+
+
+
+
+feedback
+variances with activation functions
+
+compare with nearest neighbors or quadratic classifier
+
+validation loss and convergence loss plot
+
+warm start
 
 
 
