@@ -6,6 +6,7 @@ from scipy.io import loadmat
 from sklearn.neural_network import MLPClassifier
 from sklearn.model_selection import train_test_split
 from sklearn.linear_model import Perceptron
+from sklearn.neighbors import KNeighborsClassifier
 
 # FUNCTIONS
 #################################################################
@@ -142,6 +143,56 @@ X01, y01 = separate_labels(X,y,(0,1))
 print "------Perceptron classifier"
 per = Perceptron(verbose=0,max_iter=100000)
 # classifier_test(X01,y01,per,10)
+
+# k-Nearest Neigborgh classifier
+#################################################################
+print "------k-NN classifier"
+knn = KNeighborsClassifier('auto')
+
+# neighbors test
+# print "----auto algorthm"
+# neighbors = np.arange(1,20)
+# yTime = []
+# yScore = []
+# for n in neighbors:
+#     print "--Number of neighbors: {}".format(n)
+#     knn.set_params(n_neighbors=n)
+#     s, t = classifier_test(X01,y01,knn,100)
+#     yTime.append(t)
+#     yScore.append(s)
+#
+# plot_score_time(neighbors,"Number of neighbors",yScore,yTime)
+
+# algorthm test
+algorthms = ['auto','ball_tree','kd_tree','brute']
+neighbors = np.arange(1,20)
+for a in algorthms:
+    yTime = []
+    yScore = []
+    print "----{} algorithm".format(a)
+    knn.set_params(algorithm=a)
+    for n in neighbors:
+        print "--Number of neighbors: {}".format(n)
+        knn.set_params(n_neighbors=n)
+        s, t = classifier_test(X01,y01,knn,50)
+        yTime.append(t)
+        yScore.append(s)
+    plt.subplot(1,2,1)
+    plt.plot(neighbors,yScore,'--x',label="{}".format(a))
+    plt.subplot(1,2,2)
+    plt.plot(neighbors,yTime,'--x',label="{}".format(a))
+plt.subplot(1,2,1)
+plt.legend(loc="lower left")
+plt.xlabel("Neigborghs")
+plt.ylabel("Average score")
+plt.subplot(1,2,2)
+plt.legend(loc="lower left")
+plt.xlabel("Neigborghs")
+plt.ylabel("Average training time [s]")
+plt.show()
+
+knn.set_params(algorthm='auto')
+knn.set_params(n_neighbors=5)
 
 # Multy layer perceptron classifier
 #################################################################
