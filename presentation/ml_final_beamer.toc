@@ -1,4 +1,0 @@
-\beamer@endinputifotherversion {3.36pt}
-\select@language {english}
-\beamer@sectionintoc {1}{Perceptron Classifier}{2}{0}{1}
-\beamer@sectionintoc {2}{Multy-Layer Perceptron (MLP) Classifier}{4}{0}{2}
